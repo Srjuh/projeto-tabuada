@@ -5,25 +5,10 @@ const path = require('path');
 
 const server = http.createServer((req, res) => {
     const query = url.parse(req.url, true).query;
-
-    // Pegando o número da tabuada e a sequência
     const num = parseInt(query.tabuada);
-    const seq = query.sequencia ? parseInt(query.sequencia) : 10; // Padrão de 10
+    const seq = query.sequencia ? parseInt(query.sequencia) : 10;
 
-    // Se a requisição for para a raiz, exibir o HTML
-    if (req.method === 'GET' && req.url === '/') {
-        fs.readFile(path.join(__dirname, 'publico', 'index.html'), 'utf-8', (err, data) => {
-            if (err) {
-                console.error('Erro ao carregar o HTML:', err);
-                res.writeHead(500, { 'Content-Type': 'text/html' });
-                res.write('<h1>Erro ao carregar a página</h1>');
-                res.end();
-                return;
-            }
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(data);
-        });
-    } else if (!isNaN(num)) { // Se o número for válido
+    if (!isNaN(num)) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.write('<html><body>');
         res.write(`<h1>Tabuada do ${num}</h1>`);
@@ -34,8 +19,7 @@ const server = http.createServer((req, res) => {
         res.write('</ul>');
         res.write('</body></html>');
         res.end();
-    } else { // Caso contrário
-        console.error('Número inválido ou não fornecido:', query.tabuada);
+    } else {
         res.writeHead(400, { 'Content-Type': 'text/html' });
         res.write('<h1>Erro: Número inválido</h1>');
         res.end();
@@ -44,5 +28,5 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
